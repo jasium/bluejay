@@ -13,21 +13,26 @@ function updateURN() {
     json = JSON.stringify(obj);
 
     //alert(json);
-    var c = Iuppiter.compress(json);
-    //window.confirm(c);
+    var compressed = Iuppiter.compress(json);
+    //window.confirm(compressed);
 
-    //var d = Iuppiter.decompress(c);
-    //window.confirm(d);
+    var decompressed = Iuppiter.decompress(compressed);
+    console.log("decompressed = compressed:" + decompressed == compressed);
+    console.log("decompressed: " + decompressed);
+    console.log("compressed: " + compressed);
 
-    // Compressed byte array can be converted into base64 to sumbit to server side to do something.
-    var b = Iuppiter.Base64.encode(c, true);
-    document.getElementById("urn").value = "urn:AUDLZ2:" + b;
-//
-//    window.confirm(b);
-    var bb = Iuppiter.toByteArray(b);
-    var db = Iuppiter.decompress(Iuppiter.Base64.decode(bb, true));
+    // Compressed byte array can be converted into base64 to submit to server side to do something.
+    var base64Encoded = Iuppiter.Base64.encode(compressed, true);
+    //var base64Bytes = Iuppiter.toByteArray(base64Encoded);
+    document.getElementById("urn").value = "urn:AUDLZ2:" + base64Encoded;
 
-    document.getElementById("blob").value = db;
+    var unencoded = Iuppiter.Base64.decode(base64Encoded, false);
+    console.log("unencoded:" + unencoded);
+    var unmangledJSON = Iuppiter.decompress(unencoded, false);
+    console.log("unmangled json: " + unmangledJSON);
+
+    document.getElementById("blob").value = unencoded;
+    console.log("tried setting blob value to: " + unencoded);
 
 }
 
